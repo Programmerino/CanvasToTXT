@@ -1,0 +1,35 @@
+name: "Package"
+on:
+  push:
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.10
+        with:
+          versionSpec: '5.x'
+          includePrerelease: true
+      - uses: actions/checkout@v2.3.4
+      - uses: cachix/install-nix-action@v14
+        with:
+          install_url: https://nixos-nix-install-tests.cachix.org/serve/vij683ly7sl95nnhb67bdjjfabclr85m/install
+          install_options: '--tarball-url-prefix https://nixos-nix-install-tests.cachix.org/serve'
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+            access-tokens = github.com=${{ secrets.GITHUB_TOKEN }}
+      - uses: cachix/cachix-action@v10
+        with:
+          name: programmerino
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Determine Version
+        id:   gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.10
+      - run: nix-shell --run "dotnet nuget add source --username Programmerino --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github \"https://nuget.pkg.github.com/Programmerino/index.json\""
+      - run: nix build --impure -L
+      - run: echo "nupkgFile=./result/$(ls ./result | head -n 1)" >> $GITHUB_ENV
+      - run: nix-shell --run "dotnet nuget push \"${{ env.nupkgFile }}\"  --api-key ${{ secrets.GITHUB_TOKEN }} --source \"github\""

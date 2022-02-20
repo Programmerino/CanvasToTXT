@@ -1,0 +1,92 @@
+{
+  "nodes": {
+    "dotnet": {
+      "inputs": {
+        "flake-utils": "flake-utils",
+        "nixpkgs": "nixpkgs"
+      },
+      "locked": {
+        "lastModified": 1634444819,
+        "narHash": "sha256-b15lYrn1QXWjn7xXb+nvfvsiLUKdyVKRQBfisSIihVQ=",
+        "owner": "Programmerino",
+        "repo": "dotnet-nix",
+        "rev": "9b55c292bf038619ee8e412ef7305ba2d8d6c611",
+        "type": "github"
+      },
+      "original": {
+        "owner": "Programmerino",
+        "repo": "dotnet-nix",
+        "type": "github"
+      }
+    },
+    "flake-utils": {
+      "locked": {
+        "lastModified": 1631561581,
+        "narHash": "sha256-3VQMV5zvxaVLvqqUrNz3iJelLw30mIVSfZmAaauM3dA=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "7e5bf3925f6fbdfaf50a2a7ca0be2879c4261d19",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "flake-utils_2": {
+      "locked": {
+        "lastModified": 1644229661,
+        "narHash": "sha256-1YdnJAsNy69bpcjuoKdOYQX0YxZBiCYZo4Twxerqv7k=",
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "rev": "3cecb5b042f7f209c56ffd8371b2711a290ec797",
+        "type": "github"
+      },
+      "original": {
+        "owner": "numtide",
+        "repo": "flake-utils",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1633402839,
+        "narHash": "sha256-KAT+40+l+BKNeJW6AiX4+Q2e7Qw6r+poWbGdAfxgnKc=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "561f938ff1bac78fe1fdcee49672ef89d068dee2",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1644962544,
+        "narHash": "sha256-IQzuBoViAMcZCUOcWsIzEQZ5vGVwC0P36RYqgVU8w6I=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "ed9c8d388e818858102b8956ee140a4cc18bb3b3",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "dotnet": "dotnet",
+        "flake-utils": "flake-utils_2",
+        "nixpkgs": "nixpkgs_2"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}

@@ -1,0 +1,65 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <OutputType Condition="'$(library)' == ''">Exe</OutputType>
+    <OutputType Condition="'$(library)' == '1'">Library</OutputType>
+    <OutputType Condition="'$(library)' == '0'">Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <RuntimeIdentifiers Condition="'$(target)' == ''">linux-x64</RuntimeIdentifiers>
+    <RuntimeIdentifiers Condition="'$(target)' != ''">$(target)</RuntimeIdentifiers>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <PublishTrimmed>true</PublishTrimmed>
+    <PublishReadyToRun>true</PublishReadyToRun>
+    <TrimMode>link</TrimMode>
+    <IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+    <IlcDisableReflection>false</IlcDisableReflection>
+    <IlcOptimizationPreference>Speed</IlcOptimizationPreference>
+    <IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+    <AutoreleasePoolSupport>false</AutoreleasePoolSupport>
+    <DebuggerSupport>false</DebuggerSupport>
+    <EnableUnsafeBinaryFormatterSerialization>false</EnableUnsafeBinaryFormatterSerialization>
+    <EnableUnsafeUTF7Encoding>false</EnableUnsafeUTF7Encoding>
+    <EventSourceSupport>false</EventSourceSupport>
+    <HttpActivityPropagationSupport>false</HttpActivityPropagationSupport>
+    <MetadataUpdaterSupport>false</MetadataUpdaterSupport>
+    <UseNativeHttpHandler>true</UseNativeHttpHandler>
+    <UseSystemResourceKeys>true</UseSystemResourceKeys>
+    <DebugSymbols>false</DebugSymbols>
+    <NativeDebugSymbols>false</NativeDebugSymbols>
+    <ErrorOnDuplicatePublishOutputFiles>false</ErrorOnDuplicatePublishOutputFiles>
+    <PackageId Condition="'$(name)' == ''">CanvasToTXT</PackageId>
+    <PackageId Condition="'$(name)' != ''">$(name)</PackageId>
+    <Version Condition="'$(version)' == ''">0.0.0</Version>
+    <Version Condition="'$(version)' != ''">$(version)</Version>
+    <Authors>Davis Davalos-DeLosh</Authors>
+    <Company>Davis Davalos-DeLosh</Company>
+    <PackageDescription>...</PackageDescription>
+    <RepositoryUrl Condition="'$(name)' == ''">https://github.com/Programmerino/CanvasToTXT</RepositoryUrl>
+    <RepositoryUrl Condition="'$(name)' != ''">https://github.com/Programmerino/$(name)</RepositoryUrl>
+    <TrimmerDefaultAction>link</TrimmerDefaultAction>
+</PropertyGroup>
+
+  <Target Name="ConfigureTrimming" BeforeTargets="PrepareForILLink">
+    <ItemGroup>
+      <TrimmerRootAssembly Include="@(IntermediateAssembly)" />
+      <ManagedAssemblyToLink>
+        <IsTrimmable>true</IsTrimmable>
+      </ManagedAssemblyToLink>
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="Helpers" Version="0.1.0.2" />
+    <RdXmlFile Include="FSharp.Core.xml" />
+    <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="7.0.0-preview.3.22118.2" />
+    <RuntimeHostConfigurationOption Include="Switch.System.Reflection.Disabled.DoNotThrowForNames" Value="true" />
+    <RuntimeHostConfigurationOption Include="Switch.System.Reflection.Disabled.DoNotThrowForAssembly" Value="true" />
+    <RuntimeHostConfigurationOption Include="Switch.System.Reflection.Disabled.DoNotThrowForAttributes" Value="true" />
+    <RuntimeHostConfigurationOption Include="Switch.System.Reflection.Assembly.SimulatedCallingAssembly" Value="true" />
+    <PackageReference Include="FSharp.Core" Version="5.0.0" />
+    <!--7.0.0-alpha.1.22074.1 encounters https://github.com/dotnet/runtimelab/issues/1713-->
+    <PackageReference Include="FSharpPlus" Version="1.2.2" />
+    <PackageReference Include="FSharp.Data" Version="4.2.7" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+</Project>

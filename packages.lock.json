@@ -1,0 +1,79 @@
+{
+  "version": 1,
+  "dependencies": {
+    "net6.0": {
+      "FSharp.Core": {
+        "type": "Direct",
+        "requested": "[6.0.1, )",
+        "resolved": "6.0.1",
+        "contentHash": "VrFAiW8dEEekk+0aqlbvMNZzDvYXmgWZwAt68AUBqaWK8RnoEVUNglj66bZzhs4/U63q0EfXlhcEKnH1sTYLjw=="
+      },
+      "FSharp.Data": {
+        "type": "Direct",
+        "requested": "[4.2.7, )",
+        "resolved": "4.2.7",
+        "contentHash": "gQO0u0q1z9wXOkSmL7TVQLspAGR/S2Vm3CDPStEHCcTQyivkgoZie0IsB2Zyl2inC+hmQa/jcVQNQjo7XB7Ujg==",
+        "dependencies": {
+          "FSharp.Core": "4.7.2"
+        }
+      },
+      "FSharpPlus": {
+        "type": "Direct",
+        "requested": "[1.2.2, )",
+        "resolved": "1.2.2",
+        "contentHash": "YzWFuAua/OCevT05FoWSInP3i6DGAwRqyJd0DtFWSisPI6LAqCMTWaj5hT4BDLDabvricVZ5VD/FWfSNubL6Gg==",
+        "dependencies": {
+          "FSharp.Core": "4.6.2"
+        }
+      },
+      "Helpers": {
+        "type": "Direct",
+        "requested": "[0.1.0.2, )",
+        "resolved": "0.1.0.2",
+        "contentHash": "JAxCU57WSJxH4WrQsqs/W0FZ/b+9mzlPPZYpd+yTqwb60iyk7zFI614386p0dyzo8qQbhqPIoJEfamRM0O5ZiA==",
+        "dependencies": {
+          "FSharp.Control.Reactive": "5.0.2",
+          "FSharp.Core": "6.0.1",
+          "FSharpPlus": "1.2.2",
+          "Microsoft.DotNet.ILCompiler": "7.0.0-preview.3.22118.2"
+        }
+      },
+      "Microsoft.DotNet.ILCompiler": {
+        "type": "Direct",
+        "requested": "[7.0.0-preview.3.22118.2, )",
+        "resolved": "7.0.0-preview.3.22118.2",
+        "contentHash": "o2HA4ialEHjFcJ5KCkE1uVBoP9jrnjtgc2ujzZCIuXzOXGX/YNfQ/nMDlUAfwu1zwbw4tNfB+kQT9XmRtlna+Q=="
+      },
+      "FSharp.Control.Reactive": {
+        "type": "Transitive",
+        "resolved": "5.0.2",
+        "contentHash": "XyPAAe1xnKVF5HRMaRBdrXPkj7lPvx3sy2j0xb1cHZCv8Nrvyzb/EtbUZU/QowiRB5Oi2DTP/rChi3REUOeJRA==",
+        "dependencies": {
+          "FSharp.Core": "4.7.2",
+          "System.Reactive": "5.0.0"
+        }
+      },
+      "System.Reactive": {
+        "type": "Transitive",
+        "resolved": "5.0.0",
+        "contentHash": "erBZjkQHWL9jpasCE/0qKAryzVBJFxGHVBAvgRN1bzM0q2s1S4oYREEEL0Vb+1kA/6BKb5FjUZMp5VXmy+gzkQ=="
+      }
+    },
+    "net6.0/linux-x64": {
+      "Microsoft.DotNet.ILCompiler": {
+        "type": "Direct",
+        "requested": "[7.0.0-preview.3.22118.2, )",
+        "resolved": "7.0.0-preview.3.22118.2",
+        "contentHash": "o2HA4ialEHjFcJ5KCkE1uVBoP9jrnjtgc2ujzZCIuXzOXGX/YNfQ/nMDlUAfwu1zwbw4tNfB+kQT9XmRtlna+Q==",
+        "dependencies": {
+          "runtime.linux-x64.Microsoft.DotNet.ILCompiler": "7.0.0-preview.3.22118.2"
+        }
+      },
+      "runtime.linux-x64.Microsoft.DotNet.ILCompiler": {
+        "type": "Transitive",
+        "resolved": "7.0.0-preview.3.22118.2",
+        "contentHash": "lH9gehov2mJlrVxWW1UKiLVHEvVvvehG5Y5hql0FYby3l0vQrrInp27XU1ekVXwNrbA4C/pL7abi272uWF0xLg=="
+      }
+    }
+  }
+}
