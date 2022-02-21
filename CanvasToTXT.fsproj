@@ -49,15 +49,15 @@
   </Target>
 
   <ItemGroup>
-    <PackageReference Include="Helpers" Version="0.1.0.2" />
+    <PackageReference Include="Helpers" Version="0.1.0.3" />
     <RdXmlFile Include="FSharp.Core.xml" />
+    <!--7.0.0-alpha.1.22074.1 encounters https://github.com/dotnet/runtimelab/issues/1713-->
     <PackageReference Include="Microsoft.DotNet.ILCompiler" Version="7.0.0-preview.3.22118.2" />
     <RuntimeHostConfigurationOption Include="Switch.System.Reflection.Disabled.DoNotThrowForNames" Value="true" />
     <RuntimeHostConfigurationOption Include="Switch.System.Reflection.Disabled.DoNotThrowForAssembly" Value="true" />
     <RuntimeHostConfigurationOption Include="Switch.System.Reflection.Disabled.DoNotThrowForAttributes" Value="true" />
     <RuntimeHostConfigurationOption Include="Switch.System.Reflection.Assembly.SimulatedCallingAssembly" Value="true" />
     <PackageReference Include="FSharp.Core" Version="5.0.0" />
-    <!--7.0.0-alpha.1.22074.1 encounters https://github.com/dotnet/runtimelab/issues/1713-->
     <PackageReference Include="FSharpPlus" Version="1.2.2" />
     <PackageReference Include="FSharp.Data" Version="4.2.7" />
     <Compile Include="Program.fs" />

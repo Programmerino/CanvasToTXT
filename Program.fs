@@ -25,12 +25,23 @@ module Answer =
         { Correct: string list
           Wrong: string list }
 
+    type Match =
+        { Prompt: string
+          Correct: string
+          Others: string list }
+
+    type MatchingAnswer =
+        { QuestionText: string
+          Matches: Match list }
+
+
     type Answer =
         | MultipleChoiceAns of MultipleChoiceAns
         | MultipleAnswers of MultipleAnswers
+        | MatchingAnswer of MatchingAnswer
         | StringPass of string
 
-    let (|TrueFalseQuestion|MultipleChoiceQuestion|MultipleAnswersQuestion|MultipleDropdownsQuestion|Unknown|)
+    let (|TrueFalseQuestion|MultipleChoiceQuestion|MultipleAnswersQuestion|MultipleDropdownsQuestion|MatchingQuestion|Unknown|)
         (node: HtmlNode)
         =
         let classes = node.AttributeValue "class"
@@ -43,6 +54,8 @@ module Answer =
             MultipleAnswersQuestion
         else if node.HasClass "multiple_dropdowns_question" then
             MultipleDropdownsQuestion
+        else if node.HasClass "matching_question" then
+            MatchingQuestion
         else
             Console.WriteLine $"Unknown question type {classes}"
             Unknown
@@ -111,8 +124,9 @@ module Answer =
 
     let multipleDropdownsCreate (x: HtmlNode) correct sharingCorrect : string option =
         monad {
-            if sharingCorrect then
-                failwith "sharingCorrect not implemented for multipleDropdownsCreate"
+            let! _ =
+                Option.assertion (not sharingCorrect)
+                |> Option.log "sharingCorrect not implemented for multipleDropdownsCreate"
 
             let! _ =
                 Option.assertion correct
@@ -178,6 +192,54 @@ module Answer =
             cleanQuestionText str
         }
 
+    let matchingCreate (x: HtmlNode) correct sharingCorrect : MatchingAnswer option =
+        monad {
+            let! _ =
+                Option.assertion (not sharingCorrect)
+                |> Option.log "sharingCorrect not implemented for matching"
+
+            let! _ =
+                Option.assertion correct
+                |> Option.log "Matching question must be correct"
+
+            let! qtextElem =
+                x.CssSelect(".question_text")
+                |> tryHead
+                |> Option.log "No question text element found"
+
+            let qtext = qtextElem.InnerText()
+
+            let matches =
+                x.CssSelect(".matching_answer")
+                |> map (fun x ->
+                    (x.CssSelect("div")
+                     |> map (fun x -> x.DirectInnerText())
+                     |> sum
+                     |> String.trimWhiteSpaces,
+                     x.CssSelect(".question_input option")
+                     |> map (fun x -> x.DirectInnerText(), x.HasAttribute("selected", ""))
+                     |> toList
+                     |> Option.asserttap (length >> (<) 0)
+                     |> Option.log "No options found for matching answer, skipping"))
+                |> choose (fun (x, y) ->
+                    match y with
+                    | Some y -> Some(x, y)
+                    | None -> None)
+                |> map (fun (x, y) ->
+                    { Prompt = x
+                      Correct =
+                        y
+                        |> List.find (fun (_, selected) -> selected)
+                        |> (fun (x, _) -> x)
+                      Others =
+                        y
+                        |> List.filter (fun (_, selected) -> not selected)
+                        |> map (fun (x, _) -> x) })
+
+            { QuestionText = cleanQuestionText qtext
+              Matches = matches |> Seq.toList }
+        }
+
 
     let createAnswer (x: HtmlNode) correct showingAnswers : Answer option =
         match x with
@@ -191,6 +253,9 @@ module Answer =
         | MultipleDropdownsQuestion ->
             multipleDropdownsCreate x correct showingAnswers
             |> map (StringPass)
+        | MatchingQuestion ->
+            matchingCreate x correct showingAnswers
+            |> map (MatchingAnswer)
         | Unknown -> None
 
     let listAnswers (x: Answer) : String list =
@@ -198,6 +263,7 @@ module Answer =
         | MultipleChoiceAns x -> x.Correct :: x.Wrong
         | MultipleAnswers x -> x.Correct ++ x.Wrong
         | StringPass x -> failwith "listAnswers unimplemented for StringPass"
+        | MatchingAnswer x -> failwith "listAnswers unimplemented for MatchingAnswer"
         |> shuffle Environment.TickCount
 
 open Answer
@@ -314,7 +380,25 @@ module Question =
                 let answer = if correct then "True" else "False"
                 $"{x.QuestionText}: {z} (True/False)? {answer}")
         | StringPass y -> [ y ]
+        | MatchingAnswer y ->
+            y.Matches
+            |> List.map
 
+
+                (fun { Prompt = prompt
+                       Correct = correct
+                       Others = others } ->
+                    let answers =
+                        correct :: others |> shuffle Environment.TickCount
+
+                    let answers =
+                        if (length answers = 1) then
+                            answers ++ [ "Other" ]
+                        else
+                            answers
+
+                    let possibleAnswersStr = answers |> intercalate "/"
+                    $"{y.QuestionText}: {prompt} -> {correct} ({possibleAnswersStr})")
 
 let vowels =
     set [ 'a'

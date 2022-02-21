@@ -28,9 +28,9 @@
       },
       "Helpers": {
         "type": "Direct",
-        "requested": "[0.1.0.2, )",
-        "resolved": "0.1.0.2",
-        "contentHash": "JAxCU57WSJxH4WrQsqs/W0FZ/b+9mzlPPZYpd+yTqwb60iyk7zFI614386p0dyzo8qQbhqPIoJEfamRM0O5ZiA==",
+        "requested": "[0.1.0.3, )",
+        "resolved": "0.1.0.3",
+        "contentHash": "aSZCZ14MiY28A0Sopy20pFRheypUGlSAZGG4Voeh1UbXKws5VDwOIihcdHk7aqjdMkD0CMjIgEogXMYG5MNblg==",
         "dependencies": {
           "FSharp.Control.Reactive": "5.0.2",
           "FSharp.Core": "6.0.1",
