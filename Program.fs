@@ -13,9 +13,9 @@ let shuffle seed xs =
 let cleanQuestionText =
     replace "\n" " "
     >> replace "\t" " "
-    >> String.trimWhiteSpaces
-    >> replace "  " ""
     >> replace "\u00a0" " "
+    >> replace "  " " "
+    >> String.trimWhiteSpaces
 
 module Answer =
 
@@ -184,12 +184,28 @@ module Answer =
                     ("", "", -1, 0)
                 |> (fun (x, _, _, y) -> x, y)
 
-            let! _ =
-                Option.assertion (inputs <> 0)
-                |> Option.log
-                    "Dropdown question had no inputs. Ignoring this question because non fill-in questions are not implemented"
 
-            cleanQuestionText str
+            // let! _ =
+            //     Option.assertion (inputs <> 0)
+            //     |> Option.log
+            //         "Dropdown question had no inputs. Creating true/false questions out of available information"
+
+            match inputs with
+            | 0 ->
+                printfn "Dropdown question had no inputs. Creating \"other\" questions out of available information"
+
+                qtext.Descendants()
+                |> Seq.fold
+                    (fun (str, skipNext) x ->
+                        match (x.Name(), skipNext) with
+                        | ("span", _) -> ($"{str}{x.DirectInnerText()} ({x.DirectInnerText()}/other)", true)
+                        | (_, false) -> ($"{str}{x.DirectInnerText()}", false)
+                        | _ -> ($"{str}", false))
+                    ("", false)
+                |> fst
+            | _ -> str
+            |> cleanQuestionText
+
         }
 
     let matchingCreate (x: HtmlNode) correct sharingCorrect : MatchingAnswer option =
@@ -385,6 +401,8 @@ module Question =
             |> List.map
 
 
+
+
                 (fun { Prompt = prompt
                        Correct = correct
                        Others = others } ->
@@ -393,7 +411,7 @@ module Question =
 
                     let answers =
                         if (length answers = 1) then
-                            answers ++ [ "Other" ]
+                            answers ++ [ "other" ]
                         else
                             answers
 
@@ -504,8 +522,6 @@ let main argv =
             truncate
             >> Option.log "###Question could not be reduced to fit size requirements"
         )
-        |> map (String.replace "  " "")
-        |> map (String.replace "\u00a0" "")
         |> filter ((<>) "")
         |> List.iter Console.WriteLine
 
