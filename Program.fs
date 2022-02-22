@@ -192,13 +192,13 @@ module Answer =
 
             match inputs with
             | 0 ->
-                printfn "Dropdown question had no inputs. Creating \"other\" questions out of available information"
+                printfn "Dropdown question had no inputs. Creating \"bracket\" questions out of available information"
 
                 qtext.Descendants()
                 |> Seq.fold
                     (fun (str, skipNext) x ->
                         match (x.Name(), skipNext) with
-                        | ("span", _) -> ($"{str}{x.DirectInnerText()} ({x.DirectInnerText()}/other)", true)
+                        | ("span", _) -> ($"{str}[{x.DirectInnerText()}]", true)
                         | (_, false) -> ($"{str}{x.DirectInnerText()}", false)
                         | _ -> ($"{str}", false))
                     ("", false)
@@ -400,23 +400,19 @@ module Question =
             y.Matches
             |> List.map
 
-
-
-
                 (fun { Prompt = prompt
                        Correct = correct
                        Others = others } ->
                     let answers =
                         correct :: others |> shuffle Environment.TickCount
 
-                    let answers =
-                        if (length answers = 1) then
-                            answers ++ [ "other" ]
-                        else
-                            answers
-
                     let possibleAnswersStr = answers |> intercalate "/"
-                    $"{y.QuestionText}: {prompt} -> {correct} ({possibleAnswersStr})")
+
+                    $"{y.QuestionText}: {prompt} -> {correct}"
+                    ++ if (length answers <> 1) then
+                           $" ({possibleAnswersStr})"
+                       else
+                           "")
 
 let vowels =
     set [ 'a'
