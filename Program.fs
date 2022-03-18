@@ -104,7 +104,6 @@ module Answer =
                         | Checked when (not correct) -> Some(Choice2Of2(text))
                         | _ -> failwith "impossible")
                 |> List.partitionMap id
-
             return { Correct = correct; Wrong = incorrect }
         }
 
@@ -114,7 +113,7 @@ module Answer =
 
             let! _ =
                 Option.assertion (ans.Correct |> length = 1)
-                |> Option.log "Multiple choice question must have exactly one correct answer"
+                |> Option.log $"Multiple choice question must have exactly one correct answer, but it had {ans.Correct |> length}. This can happen when using the static source code for the quiz page (such as when downloading the page through the browser). Please use an extension to retrieve the HTML"
 
             return
                 { Correct = ans.Correct |> head
@@ -340,11 +339,11 @@ module Question =
                      Some false
                  else
                      None)
-                |> Option.log $"Couldn't directly determine correctness of {questionName (x)}, assessing points"
+                |> Option.log $"###Couldn't directly determine correctness of {questionName (x)}, assessing points"
                 |> (fun y ->
                     match y with
                     | Some _ -> y
-                    | None -> pointCorrectness x)
+                    | None -> let res = pointCorrectness x in let show = res |> Option.map(string) |> Option.defaultValue "error" in printfn $"###{questionName (x)} determined to be {show}"; res)
 
             let! _ =
                 Option.assertion (x.CssSelect("img") |> length = 0)
